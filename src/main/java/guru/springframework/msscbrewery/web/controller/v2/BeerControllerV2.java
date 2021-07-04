@@ -8,11 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -62,8 +64,9 @@ public class BeerControllerV2 {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<List> validationErrorHandler(ConstraintViolationException e){
-        List<String> errors = new ArrayList<>(e.getConstraintViolations().size());
-        e.getConstraintViolations().forEach(row->{
+        final Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        List<String> errors = new ArrayList<>(constraintViolations.size());
+        constraintViolations.forEach(row->{
             errors.add(row.getPropertyPath() +" : " +row.getMessage());
         });
         return new ResponseEntity<>(erros,HttpStatus.BAD_REQUEST);
