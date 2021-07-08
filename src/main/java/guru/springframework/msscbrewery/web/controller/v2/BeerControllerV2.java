@@ -69,7 +69,7 @@ public class BeerControllerV2 {
         constraintViolations.forEach(row->{
             errors.add(row.getPropertyPath() +" : " +row.getMessage());
         });
-        return new ResponseEntity<>(erros,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
 
 
     }
